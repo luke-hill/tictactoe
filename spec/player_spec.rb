@@ -2,36 +2,46 @@
 
 require 'spec_helper'
 
-RSpec.describe TicTacToe::Player do
-  describe '#initialize' do
-    subject { TicTacToe::Player.new(details) }
+module TicTacToe
+  RSpec.describe Player do
+    let(:details) do
+      {
+        name: name,
+        symbol: symbol
+      }
+    end
+    let(:name) { 'Test Player' }
+    let(:symbol) { 'O' }
 
-    context 'with valid details' do
-      let(:details) do
-        {
-          name: name,
-          symbol: symbol
-        }
+    subject { Player.new(details) }
+
+    describe '#initialize' do
+      context 'with valid details' do
+        it 'creates the player' do
+          expect { subject }.not_to raise_error
+        end
       end
-      let(:name) { 'Test Player' }
-      let(:symbol) { 'O' }
 
-      it 'creates the Player with a name' do
-        expect(subject.name).to eq(name)
-      end
+      context 'with invalid details' do
+        let(:details) { {} }
 
-      it 'creates the Player with a symbol' do
-        expect(subject.symbol).to eq(symbol)
+        it 'throws an exception due to invalid details' do
+          expect { subject }
+            .to raise_error(ArgumentError)
+                  .with_message('Invalid Player. Must only have a symbol and a name.')
+        end
       end
     end
 
-    context 'with invalid details' do
-      let(:details) { {} }
+    describe '#name' do
+      it 'shows the Player name' do
+        expect(subject.name).to eq(name)
+      end
+    end
 
-      it 'throws an exception due to invalid details' do
-        expect { subject }
-          .to raise_error(ArgumentError)
-          .with_message('Invalid Player. Must only have a symbol and a name.')
+    describe '#symbol' do
+      it "shows the Players' symbol" do
+        expect(subject.symbol).to eq(symbol)
       end
     end
   end
