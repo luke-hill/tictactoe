@@ -28,7 +28,7 @@ module TicTacToe
         it 'throws an exception due to invalid details' do
           expect { subject }
             .to raise_error(ArgumentError)
-                  .with_message('Invalid Player. Must only have a symbol and a name.')
+            .with_message('Invalid Player. Must only have a symbol and a name.')
         end
       end
     end

@@ -6,11 +6,11 @@ module TicTacToe
 
     def initialize(input = {})
       @grid = input.fetch(:grid, default_grid)
-      #ensure_board_is_valid
+      # ensure_board_is_valid
     end
 
     def cell(x, y)
-      grid[y][x].value
+      grid[y][x]
     end
 
     def set_cell(x, y, value)

@@ -5,10 +5,13 @@ require 'spec_helper'
 module TicTacToe
   RSpec.describe Cell do
     describe '#initialize' do
-      let(:cell) { Cell.new }
       subject { cell.value }
 
-      it { is_expected.to eq('') }
+      context 'can be unassigned' do
+        let(:cell) { Cell.new }
+
+        it { is_expected.to eq('') }
+      end
 
       context 'can be given to Player 1' do
         let(:cell) { Cell.new('X') }

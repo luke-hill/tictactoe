@@ -8,53 +8,19 @@ module TicTacToe
     let(:x) { Cell.new('X') }
     let(:o) { Cell.new('O') }
 
-    let(:blank_board) do
-      [
-        [_, _, _],
-        [_, _, _],
-        [_, _, _],
-      ]
-    end
-    let(:active_board) do
-      [
-        [_, _, x],
-        [x, o, o],
-        [o, _, _],
-      ]
-    end
+    let(:blank_board) { [%w(_ _ _), %w(_ _ _), %w(_ _ _)] }
+    let(:active_board) { [%w(_ _ _), %w(X _ O), %w(_ O _)] }
+
     let(:board_elements) { subject.grid.flatten.map(&:value) }
     let(:board) { active_board }
-
-    subject { Board.new(grid: board) }
+    subject { Board.new(grid: active_board) }
 
     describe '#initialize' do
-      context 'a new game' do
-        let(:board) { blank_board }
+      it 'creates a 3x3 grid' do
+        expect(subject.grid.length).to eq(3)
 
-        it 'creates a 3x3 grid' do
-          expect(subject.grid.length).to eq(3)
-
-          subject.grid.each do |row|
-            expect(row.length).to eq(3)
-          end
-        end
-
-        it 'creates a new empty game' do
-          expect(board_elements).to all eq('')
-        end
-      end
-
-      context 'an existing game' do
-        it 'creates a 3x3 grid' do
-          expect(subject.grid.length).to eq(3)
-
-          subject.grid.each do |row|
-            expect(row.length).to eq(3)
-          end
-        end
-
-        it 'creates a new partially-complete game' do
-          expect(board_elements.uniq).to include('', 'X', 'O')
+        subject.grid.each do |row|
+          expect(row.length).to eq(3)
         end
       end
     end
@@ -66,10 +32,14 @@ module TicTacToe
     end
 
     describe '#set_cell' do
-      it 'updates the cell value based on the co-ordinates' do
-        subject.set_cell(1, 2, 'X')
+      let(:fake_cell) { Struct.new(:value) }
+      let(:fake_grid) { [[fake_cell.new("_"), "", ""], ["", "", ""], ["", "", ""]] }
 
-        expect(subject.cell(1, 2)).to eq('X')
+      it 'updates the cell value based on the co-ordinates' do
+        board = Board.new(grid: fake_grid)
+        board.set_cell(0, 0, "O")
+
+        expect(board.cell(0, 0).value).to eq("O")
       end
     end
 
