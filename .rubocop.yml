@@ -4,3 +4,8 @@ AllCops:
 
 Style/Documentation:
   Enabled: false
+
+Naming/UncommunicativeMethodParamName:
+  AllowedNames:
+    - 'x'
+    - 'y'
