@@ -4,15 +4,27 @@ require 'spec_helper'
 
 module TicTacToe
   RSpec.describe Board do
-    let(:_) { Cell.new }
-    let(:x) { Cell.new('X') }
-    let(:o) { Cell.new('O') }
+    let(:fake_cell) { Struct.new(:value) }
+    let(:_) { fake_cell.new }
+    let(:o) { fake_cell.new("O") }
+    let(:x) { fake_cell.new("X") }
 
-    let(:blank_board) { [%w(_ _ _), %w(_ _ _), %w(_ _ _)] }
-    let(:active_board) { [%w(_ _ _), %w(X _ O), %w(_ O _)] }
+    let(:blank_board) do
+      [
+        [_, _, _],
+        [_, _, _],
+        [_, _, _]
+      ]
+    end
 
-    let(:board_elements) { subject.grid.flatten.map(&:value) }
-    let(:board) { active_board }
+    let(:active_board) do
+      [
+        [_, _, _],
+        [x, _, o],
+        [_, o, _]
+      ]
+    end
+
     subject { Board.new(grid: active_board) }
 
     describe '#initialize' do
@@ -26,25 +38,21 @@ module TicTacToe
     end
 
     describe '#cell' do
-      it 'returns the cell value based on the co-ordinates' do
-        expect(subject.cell(2, 1)).to eq('O')
+      it 'returns the cell based on the co-ordinates' do
+        expect(subject.cell(2, 1)).to be_a_kind_of(fake_cell)
       end
     end
 
     describe '#set_cell' do
-      let(:fake_cell) { Struct.new(:value) }
-      let(:fake_grid) { [[fake_cell.new("_"), "", ""], ["", "", ""], ["", "", ""]] }
-
       it 'updates the cell value based on the co-ordinates' do
-        board = Board.new(grid: fake_grid)
-        board.set_cell(0, 0, "O")
+        subject.set_cell(0, 0, "O")
 
-        expect(board.cell(0, 0).value).to eq("O")
+        expect(subject.cell(0, 0).value).to eq("O")
       end
     end
 
     describe '#game_over' do
-      let(:board_instance) { Board.new(grid: board) }
+      let(:board_instance) { Board.new(grid: active_board) }
       subject { board_instance.game_over }
 
       before do
