@@ -55,30 +55,90 @@ module TicTacToe
       let(:board_instance) { Board.new(grid: active_board) }
       subject { board_instance.game_over }
 
-      before do
-        allow(board_instance).to receive(:winner?).and_return(winner?)
-        allow(board_instance).to receive(:draw?).and_return(draw?)
+      context 'with a known outcome' do
+        before do
+          allow(board_instance).to receive(:winner?).and_return(winner?)
+          allow(board_instance).to receive(:draw?).and_return(draw?)
+        end
+
+        context 'winner' do
+          let(:winner?) { true }
+          let(:draw?) { false }
+
+          it { is_expected.to eq(:winner) }
+        end
+
+        context 'draw' do
+          let(:winner?) { false }
+          let(:draw?) { true }
+
+          it { is_expected.to eq(:draw) }
+        end
+
+        context 'ongoing' do
+          let(:winner?) { false }
+          let(:draw?) { false }
+
+          it { is_expected.to be false }
+        end
       end
 
       context 'with a winning player' do
-        let(:winner?) { true }
-        let(:draw?) { false }
+        context 'with 3 in a row' do
+          let(:active_board) do
+            [
+              [_, _, _],
+              [x, x, x],
+              [_, o, o]
+            ]
+          end
 
-        it { is_expected.to eq(:winner) }
+          it { is_expected.to eq(:winner) }
+        end
+
+        context 'with 3 in a column' do
+          let(:active_board) do
+            [
+              [x, _, _],
+              [x, o, x],
+              [x, o, o]
+            ]
+          end
+
+          it { is_expected.to eq(:winner) }
+        end
+
+        context 'with 3 in a diagonal' do
+          let(:active_board) do
+            [
+              [o, o, x],
+              [o, x, x],
+              [x, x, o]
+            ]
+          end
+
+          it { is_expected.to eq(:winner) }
+        end
       end
 
       context 'when the game is drawn' do
-        let(:winner?) { false }
-        let(:draw?) { true }
+        context 'with a completed board' do
+          let(:active_board) do
+            [
+              [x, x, o],
+              [o, o, x],
+              [x, o, o]
+            ]
+          end
 
-        it { is_expected.to eq(:draw) }
+          it { is_expected.to eq(:draw) }
+        end
       end
 
       context 'when the game is ongoing' do
-        let(:winner?) { false }
-        let(:draw?) { false }
-
-        it { is_expected.to be false }
+        context 'with an incomplete board' do
+          it { is_expected.to be false }
+        end
       end
     end
   end
